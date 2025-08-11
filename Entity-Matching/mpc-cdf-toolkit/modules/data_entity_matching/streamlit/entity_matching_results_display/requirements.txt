@@ -1,0 +1,8 @@
+pyodide-http==0.2.1
+cognite-sdk==7.73.4
+pydeck==0.8.0
+streamlit_modal
+streamlit-aggrid
+statsmodels
+folium
+altair

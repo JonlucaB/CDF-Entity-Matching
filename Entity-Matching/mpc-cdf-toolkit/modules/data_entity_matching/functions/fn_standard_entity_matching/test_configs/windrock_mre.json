@@ -1,0 +1,59 @@
+{
+    "target_config": {
+      "instance_type": "node",
+      "view_id": {
+        "space": "sp_dms_mre_all",
+        "external_id": "mreEquipment",
+        "version": "v0.0.1"
+      },
+      "instance_space": "sp_dat_mre_all",
+      "fields_to_pull": [
+        "name"
+      ],
+      "fields_to_contextualize": [
+        "aliases"
+      ]
+    },
+    "source_config": {
+      "instance_type": "node",
+      "view_id": {
+        "space": "sp_dms_windrock_all",
+        "external_id": "WRHealthReport",
+        "version": "v.0.0.1"
+      },
+      "instance_space": "sp_dat_windrock_all",
+      "fields_to_pull": [
+        "name"
+      ],
+      "fields_to_contextualize": [
+        "aliases"
+      ]
+    },
+    "contextualization_config": {
+      "num_matches": 1,
+      "score_threshold": 0.4,
+      "supervised_config": {
+       
+        "id": 3698205178646572,
+        "true_matches_table": {
+          "database_name": "db_echo_data",
+          "table_name": "wr_health_report_to_mre_eq_simple_match"
+        },
+        "true_match_threshold": 0.656,
+        "write_true_matches": false,
+        "refit": false
+      },
+      "contextualization_model_config": {
+        "feature_type": "simple",
+        "timeout": 120,
+        "match_fields": [
+          "aliases"
+        ]
+      },
+      "match_result_table": {
+        "database_name": "db_entity_matching_job_result",
+        "table_name": "wr_health_report_to_mre_eq_simple_match_v4"
+      }
+    },
+    "log_level": "DEBUG"
+  }

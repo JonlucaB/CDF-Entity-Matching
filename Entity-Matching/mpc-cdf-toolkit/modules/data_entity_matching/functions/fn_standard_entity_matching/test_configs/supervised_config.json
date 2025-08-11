@@ -1,0 +1,58 @@
+{
+  "source_config": {
+    "instance_type": "node",
+    "view_id": {
+      "space": "sp_dms_piaf_all",
+      "external_id": "piafAsset",
+      "version": "v0.0.1"
+    },
+    "instance_space": "sp_dat_piaf_gnp",
+    "fields_to_pull": [
+      "name",
+      "description"
+    ],
+    "fields_to_contextualize": [
+      "aliases"
+    ],
+    "filter_tags": null
+  },
+  "target_config": {
+    "instance_type": "node",
+    "view_id": {
+      "space": "sp_dmd_mpc",
+      "external_id": "mpcAsset",
+      "version": "v0.0.1"
+    },
+    "instance_space": "sp_dat_indp_sap_gnp",
+    "fields_to_pull": [
+      "name",
+      "description"
+    ],
+    "fields_to_contextualize": [
+      "aliases"
+    ],
+    "filter_tags": null
+  },
+  "contextualization_config": {
+    "num_matches": 2,
+    "score_threshold": 0.5,
+    "supervised_config": {
+      "true_matches_table": {
+        "database_name": "db_entity_matching_job_result",
+        "table_name": "true_matches_test_table"
+      },
+      "true_match_threshold": 0.9,
+      "write_true_matches": true,
+      "id": 4171437231632618
+    },
+    "contextualization_model_config": {
+      "feature_type": "bigram",
+      "timeout": 120
+    },
+    "match_result_table": {
+      "database_name": "db_entity_matching_job_result",
+      "table_name": "test_supervised_match_results_table"
+    }
+  },
+  "log_level": "DEBUG"
+}

@@ -1,0 +1,8 @@
+externalId: entity_matching_results_display
+name: Entity Matching Results Display
+creator: jonluca.biagini@gmail.com
+description: an App to visualize match results and to add them to a true match table
+published: true
+theme: Light
+dataSetExternalId: ds_streamlit_midstream
+entrypoint: main.py
