@@ -69,7 +69,7 @@ class IRetrieveService(abc.ABC):
             select={name: dm.query.Select(
                 [dm.query.SourceSelector(
                     source=view_id, 
-                    properties=instance_config.fields_to_pull
+                    properties=instance_config.fields_to_pull + instance_config.fields_to_contextualize
                     )
                 ])
             },

@@ -162,7 +162,6 @@ class MatchingState(BaseModel):
             source_updated_time=properties.get(STATE_SOURCE_UPDATED_TIME, None)
             source_created_user=properties.get(STATE_SOURCE_CREATED_USER, None)
             source_updated_user=properties.get(STATE_SOURCE_UPDATED_USER, None)
-            active=properties.get(STATE_ACTIVE, None)
             config=properties.get(STATE_CONFIG, None)
             model_id=properties.get(STATE_MODEL_ID, None)
             interval=properties.get(STATE_INTERVAL, None)
@@ -177,7 +176,6 @@ class MatchingState(BaseModel):
             source_updated_time=source_updated_time,
             source_created_user=source_created_user,
             source_updated_user=source_updated_user,
-            active=active,
             config=config,
             model_id=model_id,
             interval=interval
@@ -193,7 +191,6 @@ class MatchingState(BaseModel):
             STATE_SOURCE_UPDATED_TIME : self.source_updated_time,
             STATE_SOURCE_CREATED_USER : self.source_created_user,
             STATE_SOURCE_UPDATED_USER: self.source_updated_user,
-            STATE_ACTIVE : self.active,
             STATE_INTERVAL : self.interval,
             STATE_CONFIG : self.config.model_dump_json()
         }, index=[self.id])
@@ -260,7 +257,7 @@ class Entity(BaseModel, alias_generator=to_camel, extra="allow", populate_by_nam
 
         for no, prop in enumerate(node_properties.keys()):
             alias=f"prop{no}"
-            standardized_properties[alias]=str(node_properties[prop])
+            standardized_properties[alias]=str(node_properties[prop]).replace('[', "").replace(']', "")
             name_by_alias[alias]=prop
 
         return cls(

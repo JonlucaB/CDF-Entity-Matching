@@ -86,16 +86,13 @@ class StateCoordinator:
             # Don't get the states that have been completed, and don't need to be run again!
             states_df=states_df[states_df[STATE_STATUS] != EntityMatchingStatus.FINALIZED]
             states_df=states_df[states_df[STATE_STATUS] != EntityMatchingStatus.ERROR]
-            states_df=states_df[~states_df[STATE_ACTIVE]]
-            states_df[STATE_ACTIVE] = True
 
             if not interval_states.empty:
                 interval_states=interval_states[interval_states.apply(lambda r: should_cron_run(cron_string=r[STATE_INTERVAL], last_run_iso=r[STATE_SOURCE_UPDATED_TIME]), axis=1)]
-                interval_states[STATE_ACTIVE] = True
                 interval_states[STATE_STATUS] = EntityMatchingStatus.NEW
                 states_df=pd.concat([states_df, interval_states])
 
-            # turn all of these states into ACTIVE in RAW as they are being held by this function call
+            # turn all of these states into NEW in RAW as they are being held by this function call
             self.client.raw.rows.insert_dataframe(
                 db_name=STATE_DB,
                 table_name=STATE_TABLE,
