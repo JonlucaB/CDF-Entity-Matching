@@ -1,0 +1,48 @@
+externalId: ctx_write_asset_hierarchy_default
+config:
+  # ============================================================================
+  # TECHNICAL SETTINGS (Usually don't need to change)
+  # ============================================================================
+  parameters:
+    debug: true                     # Enable debug mode
+    run_all: true                   # Process all assets
+    overwrite: true                 # Overwrite existing assets
+
+    # Storage configuration (where to read assets from)
+    raw_db: db_extract_assets_by_pattern
+    raw_table_assets: extract_assets_by_pattern_assets
+
+  # ============================================================================
+  # BUSINESS CONFIGURATION (What you need to customize)
+  # ============================================================================
+  data:
+    # Optional: Local file path (only used when running locally for testing)
+    hierarchy_file: modules/file_asset_hierarchy_extractor/results/asset_hierarchy.yaml
+
+    # --------------------------------------------------------------------------
+    # PROCESSING SETTINGS
+    # --------------------------------------------------------------------------
+    batch_size: 100                 # Number of assets to write per batch (recommended: 100)
+
+    # Optional: Only write assets with confidence >= this value (e.g. 0.5).
+    # Assets without a confidence property, or with confidence below this, are skipped.
+    # Omit or set to null to write all assets.
+    # min_confidence: 0.5
+
+    # --------------------------------------------------------------------------
+    # WRITE MODE
+    # --------------------------------------------------------------------------
+    dry_run: false                  # true = test mode (don't write), false = write to CDF
+
+    # --------------------------------------------------------------------------
+    # CDF DATA MODEL VIEW CONFIGURATION
+    # --------------------------------------------------------------------------
+    # Where to write assets in CDF data modeling
+    view_space: cdf_cdm              # Usually "cdf_cdm"
+    view_external_id: CogniteAsset  # Usually "CogniteAsset"
+    view_version: v1                 # Usually "v1"
+
+    # --------------------------------------------------------------------------
+    # LOGGING
+    # --------------------------------------------------------------------------
+    logLevel: INFO                   # DEBUG, INFO, WARNING, or ERROR

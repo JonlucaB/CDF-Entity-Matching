@@ -1,0 +1,12 @@
+environment:
+  name: dev
+  project: darren-core
+  type: dev
+  selected:
+    - file_asset_hierarchy_extractor
+variables:
+  modules:
+    file_asset_hierarchy_extractor:
+      functionClientId: ${IDP_CLIENT_ID}
+      functionClientSecret: ${IDP_CLIENT_SECRET}
+      function_version: '1.0.1'

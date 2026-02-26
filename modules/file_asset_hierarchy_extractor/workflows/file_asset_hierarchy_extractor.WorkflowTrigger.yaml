@@ -1,0 +1,9 @@
+externalId: file_asset_hierarchy_extractor_trigger
+triggerRule:
+  triggerType: schedule
+  cronExpression: "0 3 * * *"  # Run daily at 3 AM
+workflowExternalId: file_asset_hierarchy_extractor
+workflowVersion: v1
+authentication:
+  clientId: '{{functionClientId}}'
+  clientSecret: '{{functionClientSecret}}'

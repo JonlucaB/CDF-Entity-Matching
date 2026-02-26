@@ -1,8 +1,0 @@
-externalId: entity_matching_create_run
-name: Entity Matching Create Run
-creator: jonluca.biagini@gmail.com
-description: an App to configure a run for the entity matching function
-published: true
-theme: Light
-dataSetExternalId: ds_streamlit_midstream
-entrypoint: main.py

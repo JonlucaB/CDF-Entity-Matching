@@ -1,0 +1,53 @@
+workflowExternalId: file_asset_hierarchy_extractor
+version: 'v1'
+workflowDefinition:
+  description: 'Workflow that extracts assets from CDF files using pattern-based detection, creates asset hierarchy structure, and writes the hierarchy to CDF data modeling'
+  tasks:
+    - externalId: 'fn_dm_extract_assets_by_pattern'
+      type: 'function'
+      parameters:
+        function:
+          externalId: 'fn_dm_extract_assets_by_pattern'
+          data:
+            ExtractionPipelineExtId: 'ctx_extract_assets_by_pattern_default'
+            logLevel: 'INFO'
+      name: 'Extract Assets by Pattern'
+      description: 'Extract asset tags from CDF files using pattern-based diagram detection. Results are stored in extracted_tags and can be accessed by subsequent tasks.'
+      retries: 3
+      timeout: 3600
+      onFailure: 'abortWorkflow'
+    - externalId: 'fn_dm_create_asset_hierarchy'
+      type: 'function'
+      parameters:
+        function:
+          externalId: 'fn_dm_create_asset_hierarchy'
+          data:
+            ExtractionPipelineExtId: 'ctx_create_asset_hierarchy_default'
+            logLevel: 'INFO'
+            # The create asset hierarchy function will process extracted tags from the extract assets task
+            # It expects extracted_tags or tags in the data dict, which should be populated
+            # from the previous task's extracted_tags results
+      name: 'Create Asset Hierarchy'
+      description: 'Create asset hierarchy structure from locations and extracted tags. Processes extracted tags and generates hierarchical asset structure. Results are stored in asset_hierarchy for the write task.'
+      retries: 3
+      timeout: 3600
+      onFailure: 'abortWorkflow'
+      dependsOn:
+        - externalId: 'fn_dm_extract_assets_by_pattern'
+    - externalId: 'fn_dm_write_asset_hierarchy'
+      type: 'function'
+      parameters:
+        function:
+          externalId: 'fn_dm_write_asset_hierarchy'
+          data:
+            ExtractionPipelineExtId: 'ctx_write_asset_hierarchy_default'
+            logLevel: 'INFO'
+            # The write asset hierarchy function reads asset_hierarchy from the create asset hierarchy task
+            # and writes the assets to CDF data modeling
+      name: 'Write Asset Hierarchy'
+      description: 'Write generated asset hierarchy to CDF data modeling. Reads asset hierarchy results and writes assets to the configured CDF data model view.'
+      retries: 3
+      timeout: 3600
+      onFailure: 'abortWorkflow'
+      dependsOn:
+        - externalId: 'fn_dm_create_asset_hierarchy'

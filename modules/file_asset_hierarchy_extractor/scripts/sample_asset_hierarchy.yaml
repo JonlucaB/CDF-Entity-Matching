@@ -1,0 +1,61 @@
+# Sample asset hierarchy for sp_enterprise_schema instance space.
+# Use create_sample_asset_hierarchy.py to write this to CDF.
+# Compatible with CogniteAsset view (cdf_cdm/CogniteAsset/v1).
+items:
+  - externalId: site_SAMPLE
+    space: sp_enterprise_schema
+    properties:
+      name: SAMPLE_SITE
+      description: Sample site for key extraction and aliasing
+      tags:
+        - site
+  - externalId: plant_SAMPLE_AREA_A
+    space: sp_enterprise_schema
+    properties:
+      name: AREA_A
+      description: Sample site > Area A
+      parent:
+        space: sp_enterprise_schema
+        externalId: site_SAMPLE
+      tags:
+        - plant
+  - externalId: area_SAMPLE_AREA_A_SYSTEM_1
+    space: sp_enterprise_schema
+    properties:
+      name: SYSTEM_1
+      description: Sample site > Area A > System 1
+      parent:
+        space: sp_enterprise_schema
+        externalId: plant_SAMPLE_AREA_A
+      tags:
+        - area
+  - externalId: asset_P-10001
+    space: sp_enterprise_schema
+    properties:
+      name: P-10001
+      description: Sample pump P-10001 in System 1
+      parent:
+        space: sp_enterprise_schema
+        externalId: area_SAMPLE_AREA_A_SYSTEM_1
+      tags:
+        - equipment_tag
+  - externalId: asset_FIC-2001
+    space: sp_enterprise_schema
+    properties:
+      name: FIC-2001
+      description: Flow indicator controller FIC-2001
+      parent:
+        space: sp_enterprise_schema
+        externalId: area_SAMPLE_AREA_A_SYSTEM_1
+      tags:
+        - instrument_tag
+  - externalId: asset_T-301
+    space: sp_enterprise_schema
+    properties:
+      name: T-301
+      description: Tank T-301
+      parent:
+        space: sp_enterprise_schema
+        externalId: area_SAMPLE_AREA_A_SYSTEM_1
+      tags:
+        - equipment_tag

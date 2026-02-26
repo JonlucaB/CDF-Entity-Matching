@@ -1,0 +1,214 @@
+externalId: ctx_extract_assets_by_pattern_default
+config:
+  # ============================================================================
+  # TECHNICAL SETTINGS (Usually don't need to change)
+  # ============================================================================
+  parameters:
+    debug: false                    # Enable debug mode (for troubleshooting)
+    run_all: false                  # Process all files (or only new ones)
+    overwrite: false                # Overwrite existing results
+    initialize_state: false         # Reset processing state (use with caution)
+
+    # Storage configuration (where state and results are saved)
+    raw_db: db_extract_assets_by_pattern
+    raw_table_state: extract_assets_by_pattern_state
+    raw_table_results: null                    # Optional: separate results table (null = use state table)
+    results_field: results                     # Field name for results in state/results table
+
+  # ============================================================================
+  # BUSINESS CONFIGURATION (What you need to customize)
+  # ============================================================================
+  data:
+    # --------------------------------------------------------------------------
+    # File Processing Settings
+    # --------------------------------------------------------------------------
+    limit: -1                       # Number of files to process (-1 = all files, use 10 for testing)
+    mime_type: null                 # Filter by file type (null = all types, e.g., "application/pdf")
+    instance_space: sp_enterprise_schema  # Which CDF instance space to read files from
+
+    # --------------------------------------------------------------------------
+    # Pattern Matching Settings
+    # --------------------------------------------------------------------------
+    partial_match: true             # Allow partial matches (recommended: true)
+    min_tokens: 2                   # Minimum number of characters in a tag (recommended: 2)
+
+    # --------------------------------------------------------------------------
+    # Processing Performance
+    # --------------------------------------------------------------------------
+    batch_size: 5                   # Files to process at once (recommended: 5-10)
+    max_attempts: 3                 # Retry failed files this many times (recommended: 3)
+    max_pages_per_chunk: 50         # Pages to process per file chunk (recommended: 50)
+
+    # --------------------------------------------------------------------------
+    # Diagram Detection Settings
+    # --------------------------------------------------------------------------
+    diagram_detect_config:
+      annotation_extract: true      # Extract annotations from diagrams (recommended: true)
+      read_embedded_text: true     # Use text embedded in files (recommended: true)
+
+    # --------------------------------------------------------------------------
+    # Logging
+    # --------------------------------------------------------------------------
+    logLevel: DEBUG                 # DEBUG, INFO, WARNING, or ERROR (use INFO for normal operation)
+
+    # --------------------------------------------------------------------------
+    # ASSET TAG PATTERNS (Customize these for your organization)
+    # --------------------------------------------------------------------------
+    # Each pattern defines what asset tags to extract from your diagrams
+    # - category: equipment, instrument, document, or general
+    # - samples: Examples of tags that match this pattern
+    #   - Use [X] for any letter (e.g., [C] matches A, B, C, etc.)
+    #   - Use numbers for digits (e.g., 00, 000, 0000)
+    #   - Use X for any letter(s) (e.g., X-00 matches P-00, V-00, etc.)
+    # - resourceType: Optional equipment category
+    # - resourceSubType: Optional specific equipment type
+    # - standard: Optional standard name (e.g., "ISA51", "Custom")
+    # --------------------------------------------------------------------------
+    patterns:
+    - category: equipment
+      resourceType: major_equipment
+      resourceSubType: Rotating_Equipment
+      standard: Custom
+      sample:
+      - '[C|G]-00'
+      - '[C|G]-000'
+      - '[C|G]-0000'
+      - '[C|G]-00000'
+      - '[C|G]-00-X'
+      - '[C|G]-000-X'
+      - '[C|G]-0000-X'
+      - '[C|G]-00000-X'
+      - '00-[C|G]-00'
+      - '00-[C|G]-000'
+      - '00-[C|G]-0000'
+      - '00-[C|G]-00000'
+      - '00-[C|G]-00-X'
+      - '00-[C|G]-000-X'
+      - '00-[C|G]-0000-X'
+      - '00-[C|G]-00000-X'
+    - category: equipment
+      resourceType: major_equipment
+      resourceSubType: Static_Equipment
+      standard: Custom
+      sample:
+      - '[B|D|E|F|H|M]-00'
+      - '[B|D|E|F|H|M]-000'
+      - '[B|D|E|F|H|M]-0000'
+      - '[B|D|E|F|H|M]-00000'
+      - '[B|D|E|F|H|M]-00-X'
+      - '[B|D|E|F|H|M]-000-X'
+      - '[B|D|E|F|H|M]-0000-X'
+      - '[B|D|E|F|H|M]-00000-X'
+      - '00-[B|D|E|F|H|M]-00'
+      - '00-[B|D|E|F|H|M]-000'
+      - '00-[B|D|E|F|H|M]-0000'
+      - '00-[B|D|E|F|H|M]-00000'
+      - '00-[B|D|E|F|H|M]-00-X'
+      - '00-[B|D|E|F|H|M]-000-X'
+      - '00-[B|D|E|F|H|M]-0000-X'
+      - '00-[B|D|E|F|H|M]-00000-X'
+    - category: equipment
+      resourceType: major_equipment
+      resourceSubType: Electric_Motor
+      standard: Custom
+      sample:
+      - '[EM]-0000'
+      - '00-[EM]-0000'
+    - category: general
+      sample:
+      - X-00
+      - XX-00
+      - XXX-00
+      - X-000
+      - XX-000
+      - XXX-000
+      - X-0000
+      - XX-0000
+      - XXX-0000
+      - X-00000
+      - XX-00000
+      - XXX-00000
+      - X-00-X
+      - XX-00-X
+      - XXX-00-X
+      - X-000-X
+      - XX-000-X
+      - XXX-000-X
+      - X-0000-X
+      - XX-0000-X
+      - XXX-0000-X
+      - X-00000-X
+      - XX-00000-X
+      - XXX-00000-X
+      - '00-X-00'
+      - '00-XX-00'
+      - '00-XXX-00'
+      - '00-X-000'
+      - '00-XX-000'
+      - '00-XXX-000'
+      - '00-X-0000'
+      - '00-XX-0000'
+      - '00-XXX-0000'
+      - '00-X-00000'
+      - '00-XX-00000'
+      - '00-XXX-00000'
+      - '00-X-00-X'
+      - '00-XX-00-X'
+      - '00-XXX-00-X'
+      - '00-X-000-X'
+      - '00-XX-000-X'
+      - '00-XXX-000-X'
+      - '00-X-0000-X'
+      - '00-XX-0000-X'
+      - '00-XXX-0000-X'
+      - '00-X-00000-X'
+      - '00-XX-00000-X'
+      - '00-XXX-00000-X'
+    - category: equipment
+      resourceType: process_line
+      resourceSubType: Process_Line
+      standard: ISA95
+      sample:
+      - '[L|LN]-00'
+      - '[L|LN]-000'
+      - '[L|LN]-0000'
+      - '[L|LN]-00-X'
+      - '[L|LN]-000-X'
+      - '[L|LN]-0000-X'
+      - '00-[L|LN]-00'
+      - '00-[L|LN]-000'
+      - '00-[L|LN]-0000'
+      - '00-[L|LN]-00-X'
+      - '00-[L|LN]-000-X'
+      - '00-[L|LN]-0000-X'
+      - '[L|LN]-0000-0"-X0X0'
+      - '[L|LN]-0000-00"-X0X0'
+      - '[L|LN]-0000-000"-X0X0'
+      - '[L|LN]-0000-0"-X0X0X0'
+      - '[L|LN]-0000-00"-X0X0X0'
+      - '[L|LN]-0000-000"-X0X0X0'
+      - '00-[L|LN]-0000-0"-X0X0'
+      - '00-[L|LN]-0000-00"-X0X0'
+      - '00-[L|LN]-0000-000"-X0X0'
+      - '00-[L|LN]-0000-0"-X0X0X0'
+      - '00-[L|LN]-0000-00"-X0X0X0'
+      - '00-[L|LN]-0000-000"-X0X0X0'
+      - 'X-0000-0"-X0X0'
+      - 'X-0000-00"-X0X0'
+      - 'X-0000-000"-X0X0'
+      - 'X-0000-0"-X0X0X0'
+      - 'X-0000-00"-X0X0X0'
+      - 'X-0000-000"-X0X0X0'
+      - '00-X-0000-0"-X0X0'
+      - '00-X-0000-00"-X0X0'
+      - '00-X-0000-000"-X0X0'
+      - '00-X-0000-0"-X0X0X0'
+      - '00-X-0000-00"-X0X0X0'
+      - '00-X-0000-000"-X0X0X0'
+    - category: document
+      resourceType: document
+      resourceSubType: document
+      sample:
+      - X-000-000-X0X0X0
+      - X-000-X-000
+      - X-00000-X-000

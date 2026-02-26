@@ -1,0 +1,201 @@
+externalId: ctx_create_asset_hierarchy_default
+config:
+  # ============================================================================
+  # TECHNICAL SETTINGS (Usually don't need to change)
+  # ============================================================================
+  parameters:
+    debug: true                     # Enable debug mode
+    run_all: true                   # Process all files
+    overwrite: true                 # Overwrite existing results
+
+    # Storage configuration (where data is read from and written to)
+    raw_db: db_extract_assets_by_pattern
+    raw_table_state: extract_assets_by_pattern_state    # Source: state table with results field
+    results_field: results                                # Field name for results in state table
+    raw_table_assets: extract_assets_by_pattern_assets   # Destination: generated hierarchy
+
+    # Optional: Save hierarchy to file for review (only used when running locally)
+    output_file: modules/file_asset_hierarchy_extractor/results/asset_hierarchy.yaml
+
+    # Optional: Pattern config for asset classification
+    # If provided, assets will be classified before building hierarchy
+    # Path is relative to module root (file_asset_hierarchy_extractor/)
+    pattern_config_path: patterns/asset_tag_classifier.ISA51.config.yaml
+
+    # Instance space for assets in CDF
+    space: sp_enterprise_schema
+
+    # Optional: Tag prefix whitelist. If set, tags whose "text" does not start with
+    # any of these prefixes have confidence set to 0.0. If not set or empty, no change.
+    # tag_prefix_whitelist:
+    #   - "P-"      # e.g. P-10001
+    #   - "TI-"     # e.g. TI-1225
+    #   - "FIC-"    # e.g. FIC-2001
+
+    # Optional: Tag blacklist. If set, tags whose "text" contains any of these
+    # values have confidence set to 0.0. If not set or empty, no change.
+    # tag_blacklist:
+    #   - "TEMP"
+    #   - "TEST"
+    #   - "DUMMY"
+
+    # --------------------------------------------------------------------------
+    # HIERARCHY OPTIONS (How assets are organized)
+    # --------------------------------------------------------------------------
+    # Control whether to create intermediate asset levels for organization
+    #
+    # include_resource_type: true
+    #   Creates: Site > Plant > Area > System > ResourceType > AssetTag
+    #   Groups assets by type (e.g., all pumps together, all valves together)
+    #
+    # include_resource_subtype: true
+    #   Creates: Site > Plant > Area > System > ResourceSubType > AssetTag
+    #   Groups assets by subtype (e.g., all centrifugal pumps together)
+    #
+    # Both enabled:
+    #   Creates: Site > Plant > Area > System > ResourceType > ResourceSubType > AssetTag
+    #   Most granular organization
+    #
+    # Both disabled:
+    #   Creates: Site > Plant > Area > System > AssetTag
+    #   All assets directly under their system (simplest structure)
+    # --------------------------------------------------------------------------
+    include_resource_type: false    # Group by equipment type? (true/false)
+    include_resource_subtype: true   # Group by equipment subtype? (true/false)
+
+    # ============================================================================
+  # BUSINESS CONFIGURATION (What you need to customize)
+  # ============================================================================
+  data:
+    # --------------------------------------------------------------------------
+    # HIERARCHY STRUCTURE (Customize these names for your organization)
+    # --------------------------------------------------------------------------
+    # Define your hierarchy levels from top to bottom
+    # These names will be used as tags on your assets
+    # Example: ["site", "plant", "area", "system"] or ["facility", "building", "room"]
+    # --------------------------------------------------------------------------
+    hierarchy_levels:
+      - site
+      - plant
+      - area
+      - system
+
+    # --------------------------------------------------------------------------
+    # LOCATIONS AND FILES (Your organization's structure)
+    # --------------------------------------------------------------------------
+    # Structure: Each location has a name, description, and child locations
+    # Files are listed at the bottom level (system level)
+    # Use "locations" as the property name for all child nodes
+    # --------------------------------------------------------------------------
+    locations:
+      - name: DEMO_SITE
+        description: Demo Site
+        locations:
+        - name: DP_01
+          description: Demo Plant 1
+          locations:
+          - name: DA_01
+            description: Demo Area 1
+            locations:
+            - name: GLY_ETH
+              description: Glycol Ethers
+              files:
+              - E-108-M-001
+              - E-108-M-002
+              - E-108-M-003
+              - E-108-M-004
+              - E-108-M-005
+              - E-108-M-006
+              - E-108-M-007
+              - E-108-M-008
+              - E-108-M-009-01
+              - E-108-M-009-02
+        - name: DP_02
+          description: Demo Plant 2
+          locations:
+          - name: DA_02
+            description: Demo Area 2
+            locations:
+            - name: PO_PUR
+              description: PO Purification
+              files:
+              - E-261-M-001
+              - E-261-M-002
+              - E-262-M-001
+              - E-262-M-002
+              - E-262-M-003
+              - E-262-M-004
+              - E-262-M-005
+          - name: DA_03
+            description: Demo Area 3
+            locations:
+            - name: ARC_RER_SYS
+              description: Arconal Rerun System
+              files:
+              - E-273-M-001
+              - E-273-M-002
+            - name: BUT_HAN_SYS
+              description: Butane Handling System
+              files:
+              - E-207-M-001
+            - name: THE_TRE_STA
+              description: Thermal Treating/ Stabilization
+              files:
+              - E-271-M-001
+              - E-271-M-002
+            - name: WAT_SCR_ACE_REM
+              description: Water Scrubbing & Acetone Removal
+              files:
+              - E-272-M-001
+              - E-272-M-002
+              - E-272-M-003
+          - name: DA_04
+            description: Demo Area 4
+            locations:
+            - name: GLY_REA
+              description: Glycol Reactors
+              files:
+              - E-281-M-001
+              - E-281-M-002
+            - name: HOT_OIL
+              description: Hot Oil
+              files:
+              - E-284-M-001
+              - E-284-M-002-01
+              - E-284-M-002-02
+            - name: PRO_GLY
+              description: Propylene Glycol??
+              files:
+              - E-282-M-001
+              - E-282-M-002
+              - E-282-M-003
+              - E-282-M-004
+              - E-282-M-005
+            - name: PRO_GLY_DRY_SYS
+              description: Propylene Glycol Drying System??
+              files:
+              - E-283-M-001
+              - E-283-M-002
+              - E-283-M-003
+              - E-283-M-004
+              - E-283-M-005
+              - E-283-M-006
+              - E-283-M-007
+            - name: TRI_GLY
+              description: Tripropylene Glycol
+              files:
+              - E-208-M-001
+              - E-208-M-002
+              - E-208-M-003
+              - E-208-M-004
+
+    # --------------------------------------------------------------------------
+    # PROCESSING SETTINGS
+    # --------------------------------------------------------------------------
+    limit: -1                       # Maximum files to process (-1 = all files, use 10 for testing)
+    batch_size: null                # Files per batch (null = no batching)
+
+    # --------------------------------------------------------------------------
+    # LOGGING
+    # --------------------------------------------------------------------------
+    logLevel: INFO                  # DEBUG, INFO, WARNING, or ERROR
